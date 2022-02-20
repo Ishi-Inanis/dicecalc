@@ -1,35 +1,54 @@
 use rand::Rng;
-use std::cmp::Ordering;
 use std::io;
 
 fn main() {
-    println!("Guess the number!");
-    
-    let secret_number = rand::thread_rng().gen_range(1..=10);
-    
-    loop {
-        println!("Please input your guess.");
+    println!("=======================");
+    println!("=== Dice calculator ===");
+    println!("=======================");
+    println!("'Count' must be greater 0");
+    println!("'Dice' also must be greater 0");
 
-        let mut guess = String::new();
+    // Get Count
 
-        io::stdin()
-            .read_line(&mut guess)
-            .expect("Failed to read line");
+    println!("Count:");
 
-        let guess: u32 = match guess.trim().parse() {
-            Ok(num) => num,
-            Err(_) => continue,
-        };
+    let mut input = String::new();
 
-        println!("You guessed: {}", guess);
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Failed to read line");
 
-        match guess.cmp(&secret_number) {
-            Ordering::Less => println!("Too small!"),
-            Ordering::Greater => println!("Too big!"),
-            Ordering::Equal => {
-                println!("You win!");
-                break;
-            }
+    let count: u16 = input
+        .trim()
+        .parse()
+        .expect("It's not a number");
+
+    // Get Dice
+
+    println!("Dice:");
+
+    input = String::new();
+
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Failed to read line");
+
+    let dice: u16 = input
+        .trim()
+        .parse()
+        .expect("It's not a number");
+
+    if count > 0 && dice > 0 {
+        let mut value: u16 = 0;
+
+        for i in 1..=count {
+            let current = rand::thread_rng().gen_range(0..=dice);
+
+            value += current;
+
+            println!("{}: 1k{} {}", i, dice, current);
         }
+
+        println!("{}k{} = {}", count, dice, value);
     }
 }
